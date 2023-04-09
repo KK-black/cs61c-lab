@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "bit_ops.h": "c",
+        "vector": "c"
+    }
+}
