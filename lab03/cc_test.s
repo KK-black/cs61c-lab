@@ -57,7 +57,6 @@ main:
 simple_fn:
     li t0, 1
     mv a0, t0
-    li a0, 1
     ret
 
 # Computes a0 to the power of a1.
@@ -77,9 +76,11 @@ simple_fn:
 # missing. Another hint: what does the "s" in "s0" stand for?
 naive_pow:
     # BEGIN PROLOGUE
-    addi sp, sp, -8
+    addi sp, sp, -16
+    sw ra, 0(sp)
     sw s0, 4(sp)
-    sw a1, 0(sp)
+    sw s1, 8(sp)
+    sw s2, 12(sp)
     # END PROLOGUE
     li s0, 1
 naive_pow_loop:
@@ -90,9 +91,11 @@ naive_pow_loop:
 naive_pow_end:
     mv a0, s0
     # BEGIN EPILOGUE
-    lw a1, 4(sp)
-    lw s0, 0(sp)
-    addi sp, sp, 8
+    lw ra, 0(sp)
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    lw s2, 12(sp)
+    addi sp, sp, 16
     # END EPILOGUE
     ret
 
@@ -107,10 +110,11 @@ inc_arr:
     #
     # FIXME What other registers need to be saved?
     #
-    addi sp, sp, -12
+    addi sp, sp, -16
     sw ra, 0(sp)
     sw s0, 4(sp)
     sw s1, 8(sp)
+    sw s2, 12(sp)
     # END PROLOGUE
     mv s0, a0 # Copy start of array to saved register
     mv s1, a1 # Copy length of array to saved register
@@ -125,14 +129,19 @@ inc_arr_loop:
     # Hint: What does the "t" in "t0" stand for?
     # Also ask yourself this: why don't we need to preserve t1?
     #
+    mv s2, t0
     jal helper_fn
     # Finished call for helper_fn
+    mv t0, s2
     addi t0, t0, 1 # Increment counter
     j inc_arr_loop
 inc_arr_end:
     # BEGIN EPILOGUE
     lw ra, 0(sp)
-    addi sp, sp, 4
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    lw s2, 12(sp)
+    addi sp, sp, 16
     # END EPILOGUE
     ret
 
@@ -146,11 +155,17 @@ inc_arr_end:
 # as appropriate.
 helper_fn:
     # BEGIN PROLOGUE
+    addi sp, sp, -8
+    sw ra, 0(sp)
+    sw s0, 4(sp)
     # END PROLOGUE
     lw t1, 0(a0)
     addi s0, t1, 1
     sw s0, 0(a0)
     # BEGIN EPILOGUE
+    lw ra, 0(sp)
+    lw s0, 4(sp)
+    addi sp, sp, 8
     # END EPILOGUE
     ret
 
