@@ -1,11 +1,11 @@
 .globl map
 
 .data
-arrays: .word 5, 6, 7, 8, 9
+arrays: .word 100, 6, 7, 8, 9
         .word 1, 2, 3, 4, 7
         .word 5, 2, 7, 4, 3
         .word 1, 6, 3, 8, 4
-        .word 5, 2, 7, 8, 1
+        .word 500, 2, 7, 8, 1
 
 start_msg:  .asciiz "Lists before: \n"
 end_msg:    .asciiz "Lists after: \n"
@@ -73,7 +73,7 @@ mapLoop:
     addi t1, t1, 4      #take the index to next btye such as -1 -> 0 , 0 -> 1
     lw a0, 0(t1)        #load word a0 store value of t1
     #worry3 part1
-    addi sp, sp, 12
+    addi sp, sp, -12
     sw t0, 0(sp)
     sw t1, 4(sp)
     sw t2, 8(sp)
